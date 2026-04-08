@@ -150,12 +150,28 @@ hr { border-color: var(--border) !important; }
 # LOAD ARTIFACTS
 # ─────────────────────────────────────────────────────────────────────────────
 @st.cache_resource
+import os
+
+@st.cache_resource
 def load_artifacts():
     try:
-        with open("ohe.pkl",     "rb") as f: ohe_cols      = pickle.load(f)
-        with open("scaler.pkl",  "rb") as f: all_feat_cols = pickle.load(f)
-        with open("Xgboost.pkl", "rb") as f: model         = pickle.load(f)
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        ohe_path    = os.path.join(BASE_DIR, "ohe.pkl")
+        scaler_path = os.path.join(BASE_DIR, "scaler.pkl")
+        model_path  = os.path.join(BASE_DIR, "Xgboost.pkl")
+
+        with open(ohe_path, "rb") as f:
+            ohe_cols = pickle.load(f)
+
+        with open(scaler_path, "rb") as f:
+            all_feat_cols = pickle.load(f)
+
+        with open(model_path, "rb") as f:
+            model = pickle.load(f)
+
         return ohe_cols, all_feat_cols, model, None
+
     except Exception as e:
         return None, None, None, str(e)
 
